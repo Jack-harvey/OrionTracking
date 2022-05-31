@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using OrionTracking.Areas.Identity.Data;
 
 namespace OrionTracking.Models
 {
@@ -25,6 +26,6 @@ namespace OrionTracking.Models
         public string AspNetUserId { get; set; } = null!;
 
         [ForeignKey("AspNetUserId")]
-        public virtual AspNetUser AspNetUser { get; set; } = null!;
+        public virtual ICollection<ApplicationUser> AspNetUser { get; set; } = null!;
     }
 }

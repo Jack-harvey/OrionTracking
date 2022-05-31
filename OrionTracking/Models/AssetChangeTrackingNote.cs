@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using OrionTracking.Areas.Identity.Data;
 
 namespace OrionTracking.Models
 {
@@ -24,7 +25,7 @@ namespace OrionTracking.Models
 
         [ForeignKey("AspNetUserId")]
         [InverseProperty("AssetChangeTrackingNotes")]
-        public virtual AspNetUser AspNetUser { get; set; } = null!;
+        public virtual ICollection<ApplicationUser> AspNetUser { get; set; } = null!;
         [ForeignKey("AssetId")]
         [InverseProperty("AssetChangeTrackingNotes")]
         public virtual Asset Asset { get; set; } = null!;

@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using OrionTracking.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using OrionTracking.Models;
 
-namespace OrionTracking.Models
+namespace OrionTracking.Data
 {
     public partial class OrionContext : IdentityDbContext<ApplicationUser>
     {
@@ -37,8 +38,8 @@ namespace OrionTracking.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                optionsBuilder.UseSqlServer("Server=localhost;Database=Orion;Trusted_Connection=True;");
+                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                //                optionsBuilder.UseSqlServer("Server=localhost;Database=Orion;Trusted_Connection=True;");
             }
         }
 
@@ -77,7 +78,8 @@ namespace OrionTracking.Models
             modelBuilder.Entity<AssetChangeTrackingNote>(entity =>
             {
                 entity.HasOne(d => d.AspNetUser)
-                    .WithMany(p => p.AssetChangeTrackingNotes)
+                    .WithMany()
+                    //.WithMany(p => p.AssetChangeTrackingNotes)
                     .HasForeignKey(d => d.AspNetUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AssetChangeTrackingNotes_AspNetUsers");
