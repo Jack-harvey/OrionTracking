@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using OrionTracking.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace OrionTracking.Models
 {
-    public partial class OrionContext : DbContext
+    public partial class OrionContext : IdentityDbContext<ApplicationUser>
     {
         public OrionContext()
         {
@@ -42,6 +44,7 @@ namespace OrionTracking.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<Asset>(entity =>
             {
                 entity.HasOne(d => d.Employee)
@@ -156,6 +159,7 @@ namespace OrionTracking.Models
                     .HasConstraintName("FK_Offices_Companies");
             });
 
+            base.OnModelCreating(modelBuilder);
             OnModelCreatingPartial(modelBuilder);
         }
 
