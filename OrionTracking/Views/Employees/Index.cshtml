@@ -1,9 +1,9 @@
-﻿@model IEnumerable<OrionTracking.Models.Employee>
+﻿@*@model IEnumerable<OrionTracking.Models.Employee>*@
 
 @{
     ViewData["Title"] = "Index";
 }
-
+@*
 <h1>Index</h1>
 
 <p>
@@ -105,3 +105,17 @@
 }
     </tbody>
 </table>
+*@
+
+
+
+    <div id="dataGridContainer"></div>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/lib/dev-extreme/css/dx.light.css">
+    <link rel="stylesheet" href="~/css/Dev-Extreme.css">
+
+    <script type="text/javascript" src="~/lib/dev-extreme/js/dx.all.js"></script>
+    <script type="text/javascript" src="~/lib/dev-extreme/js/dx.aspnet.data.js"></script>
+    <script type="text/javascript" src="~/js/IndexDevExtreme.js"></script>
+}

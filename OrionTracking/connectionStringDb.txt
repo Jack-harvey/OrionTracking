@@ -1,0 +1,1 @@
+Scaffold-DbContext -Tables CompanyDivisions, Companies "Server=localhost;Database=orion;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir XModels -DataAnnotations

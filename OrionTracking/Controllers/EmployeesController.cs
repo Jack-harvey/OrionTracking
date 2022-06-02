@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OrionTracking.Data;
 using OrionTracking.Models;
+using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.Helpers;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Newtonsoft.Json;
+using OrionTracking.Models.Binding;
 
 namespace OrionTracking.Controllers
 {
@@ -22,9 +28,33 @@ namespace OrionTracking.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            var orionContext = _context.Employees.Include(e => e.Company).Include(e => e.CompanyDivision).Include(e => e.JobTitle).Include(e => e.Manager).Include(e => e.Office);
-            return View(await orionContext.ToListAsync());
+            //var orionContext = _context.Employees.Include(e => e.Company).Include(e => e.CompanyDivision).Include(e => e.JobTitle).Include(e => e.Manager).Include(e => e.Office);
+            //return View(await orionContext.ToListAsync());
+            return View();
         }
+
+        //[HttpGet("employees")]
+        [HttpGet]
+        public async Task<IActionResult> GetAction(DevExtremeDataSourceLoadOptions loadOptions)
+        {
+            var source = _context.Employees.Select(o => new
+            {
+                o.Id,
+                o.FirstName,
+                o.LastName,
+                o.StartDate,
+                o.UserName
+            });
+
+            loadOptions.PrimaryKey = new[] { "Id" };
+            loadOptions.PaginateViaPrimaryKey = true;
+
+            return Json(await DataSourceLoader.LoadAsync(source, loadOptions));
+
+        }
+
+
+
 
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -179,14 +209,14 @@ namespace OrionTracking.Controllers
             {
                 _context.Employees.Remove(employee);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EmployeeExists(int id)
         {
-          return (_context.Employees?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Employees?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
