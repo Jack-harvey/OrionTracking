@@ -24,8 +24,10 @@ namespace OrionTracking.Models
         public string NewValue { get; set; } = null!;
         [StringLength(450)]
         public string AspNetUserId { get; set; } = null!;
+        [StringLength(4000)]
+        public string? Note { get; set; }
 
         [ForeignKey("AspNetUserId")]
-        public virtual ICollection<ApplicationUser> AspNetUser { get; set; } = null!;
+        public virtual ApplicationUser AspNetUser { get; set; } = null!;
     }
 }

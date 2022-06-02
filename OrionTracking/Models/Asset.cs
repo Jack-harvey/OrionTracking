@@ -10,7 +10,6 @@ namespace OrionTracking.Models
     {
         public Asset()
         {
-            AssetChangeTrackingNotes = new HashSet<AssetChangeTrackingNote>();
             InverseParentAsset = new HashSet<Asset>();
         }
 
@@ -52,8 +51,6 @@ namespace OrionTracking.Models
         [ForeignKey("TypeId")]
         [InverseProperty("Assets")]
         public virtual AssetType Type { get; set; } = null!;
-        [InverseProperty("Asset")]
-        public virtual ICollection<AssetChangeTrackingNote> AssetChangeTrackingNotes { get; set; }
         [InverseProperty("ParentAsset")]
         public virtual ICollection<Asset> InverseParentAsset { get; set; }
     }

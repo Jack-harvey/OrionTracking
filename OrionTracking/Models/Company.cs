@@ -10,6 +10,7 @@ namespace OrionTracking.Models
     {
         public Company()
         {
+            CompanyDivisions = new HashSet<CompanyDivision>();
             Employees = new HashSet<Employee>();
             Offices = new HashSet<Office>();
         }
@@ -21,6 +22,8 @@ namespace OrionTracking.Models
         [StringLength(255)]
         public string? Domain { get; set; }
 
+        [InverseProperty("Company")]
+        public virtual ICollection<CompanyDivision> CompanyDivisions { get; set; }
         [InverseProperty("Company")]
         public virtual ICollection<Employee> Employees { get; set; }
         [InverseProperty("Company")]

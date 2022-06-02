@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using OrionTracking.Areas.Identity.Data;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using OrionTracking.Models;
 
 namespace OrionTracking.Data
@@ -20,7 +20,6 @@ namespace OrionTracking.Data
         }
 
         public virtual DbSet<Asset> Assets { get; set; } = null!;
-        public virtual DbSet<AssetChangeTrackingNote> AssetChangeTrackingNotes { get; set; } = null!;
         public virtual DbSet<AssetLocation> AssetLocations { get; set; } = null!;
         public virtual DbSet<AssetModel> AssetModels { get; set; } = null!;
         public virtual DbSet<AssetType> AssetTypes { get; set; } = null!;
@@ -39,13 +38,12 @@ namespace OrionTracking.Data
             if (!optionsBuilder.IsConfigured)
             {
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                //                optionsBuilder.UseSqlServer("Server=localhost;Database=Orion;Trusted_Connection=True;");
+                //                optionsBuilder.UseSqlServer("Server=localhost;Database=orion;Trusted_Connection=True;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<Asset>(entity =>
             {
                 entity.HasOne(d => d.Employee)
@@ -73,22 +71,6 @@ namespace OrionTracking.Data
                     .HasForeignKey(d => d.TypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Assets_AssetTypes");
-            });
-
-            modelBuilder.Entity<AssetChangeTrackingNote>(entity =>
-            {
-                entity.HasOne(d => d.AspNetUser)
-                    .WithMany()
-                    //.WithMany(p => p.AssetChangeTrackingNotes)
-                    .HasForeignKey(d => d.AspNetUserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_AssetChangeTrackingNotes_AspNetUsers");
-
-                entity.HasOne(d => d.Asset)
-                    .WithMany(p => p.AssetChangeTrackingNotes)
-                    .HasForeignKey(d => d.AssetId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_AssetChangeTrackingNotes_Assets");
             });
 
             modelBuilder.Entity<AssetModel>(entity =>
