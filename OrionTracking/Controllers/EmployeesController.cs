@@ -43,6 +43,9 @@ namespace OrionTracking.Controllers
                 o.FirstName,
                 o.LastName,
                 o.StartDate,
+                o.Email,
+                o.Office.City,
+                o.JobTitle.Name,
                 o.UserName
             });
 
