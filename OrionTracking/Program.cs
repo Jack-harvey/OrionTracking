@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OrionTracking.Data;
 using NLog;
 using NLog.Web;
+using OrionTracking.Library;
 
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -26,6 +27,9 @@ try
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
     builder.Services.AddControllersWithViews();
+
+    //Dependancy Injection for Libraries
+    builder.Services.AddScoped<IAuditUtilities, AuditUtilities>();
 
     // NLog: Setup NLog for Dependency injection
     builder.Logging.ClearProviders();

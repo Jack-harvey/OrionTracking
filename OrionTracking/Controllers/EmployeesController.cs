@@ -13,17 +13,34 @@ using DevExtreme.AspNet.Data.Helpers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using OrionTracking.Models.Binding;
+using OrionTracking.Library;
+using Microsoft.AspNetCore.Identity;
+using OrionTracking.Areas.Identity.Data;
 
 namespace OrionTracking.Controllers
 {
     public class EmployeesController : Controller
     {
         private readonly OrionContext _context;
+        private readonly IAuditUtilities _auditUtilities;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public EmployeesController(OrionContext context)
+
+        public EmployeesController(OrionContext context, IAuditUtilities auditUtilities, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _auditUtilities = auditUtilities;
+            _userManager = userManager;
         }
+
+
+        public async Task TestAudit(string currentUser)
+        {
+            //var currentUser = await _userManager.GetUserAsync(User);
+            //ApplicationUser currentUser = new ApplicationUser();
+            await _auditUtilities.WriteAuditData("testCol", 1, "OLD", "NEW", currentUser, "");
+        }
+
 
         // GET: Employees
         public async Task<IActionResult> Index()
@@ -51,6 +68,15 @@ namespace OrionTracking.Controllers
 
             loadOptions.PrimaryKey = new[] { "Id" };
             loadOptions.PaginateViaPrimaryKey = true;
+
+            string currentUser = _userManager.GetUserId(User);
+            if (currentUser != null)
+            {
+                await TestAudit(currentUser);
+                //await _auditUtilities.WriteAuditData("testCol", 1, "OLD", "NEW", currentUser, "xlkjas");
+
+
+            }
 
             return Json(await DataSourceLoader.LoadAsync(source, loadOptions));
 
