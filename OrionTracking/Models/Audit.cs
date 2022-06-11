@@ -4,18 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using OrionTracking.Areas.Identity.Data;
+using OrionTracking.Models;
 
 namespace OrionTracking.Models
 {
-    [Keyless]
     [Table("Audit")]
     public partial class Audit
     {
-        public long? Id { get; set; }
+        [Key]
+        public long Id { get; set; }
         [StringLength(255)]
         public string ColumnName { get; set; } = null!;
-        [StringLength(255)]
-        public string RowId { get; set; } = null!;
+        public int RowId { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime Timestamp { get; set; }
         [StringLength(4000)]
@@ -28,6 +28,7 @@ namespace OrionTracking.Models
         public string? Note { get; set; }
 
         [ForeignKey("AspNetUserId")]
+        [InverseProperty("Audits")]
         public virtual ApplicationUser AspNetUser { get; set; } = null!;
     }
 }

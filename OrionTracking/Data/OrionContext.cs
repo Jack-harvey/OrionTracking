@@ -85,7 +85,7 @@ namespace OrionTracking.Data
             modelBuilder.Entity<Audit>(entity =>
             {
                 entity.HasOne(d => d.AspNetUser)
-                    .WithMany()
+                    .WithMany(p => p.Audits)
                     .HasForeignKey(d => d.AspNetUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Audit_AspNetUsers");

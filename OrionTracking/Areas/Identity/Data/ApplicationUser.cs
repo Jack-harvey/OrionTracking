@@ -10,11 +10,13 @@ namespace OrionTracking.Areas.Identity.Data
 {
     public class ApplicationUser : IdentityUser
     {
-        //public ApplicationUser()
-        //{
-        //    AssetChangeTrackingNotes = new HashSet<AssetChangeTrackingNote>();
-        //}
-        //[InverseProperty("AspNetUser")]
-        //public virtual ICollection<AssetChangeTrackingNote> AssetChangeTrackingNotes { get; set; }
+        public ApplicationUser()
+        {
+           Audits = new HashSet<Audit>();
+        }
+
+        [InverseProperty("AspNetUser")]
+        public virtual ICollection<Audit> Audits { get; set; }
+
     }
 }
