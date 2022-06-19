@@ -72,7 +72,7 @@ namespace OrionTracking.Controllers
             string currentUser = _userManager.GetUserId(User);
             if (currentUser != null)
             {
-                await TestAudit(currentUser);
+                //await TestAudit(currentUser);
                 //await _auditUtilities.WriteAuditData("testCol", 1, "OLD", "NEW", currentUser, "xlkjas");
 
 
@@ -111,11 +111,11 @@ namespace OrionTracking.Controllers
         // GET: Employees/Create
         public IActionResult Create()
         {
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id");
-            ViewData["CompanyDivisionId"] = new SelectList(_context.CompanyDivisions, "Id", "Id");
-            ViewData["JobTitleId"] = new SelectList(_context.JobTitles, "Id", "Id");
-            ViewData["ManagerId"] = new SelectList(_context.Employees, "Id", "Id");
-            ViewData["OfficeId"] = new SelectList(_context.Offices, "Id", "Id");
+            ViewData["CompanyId"] = new SelectList(_context.Companies.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["CompanyDivisionId"] = new SelectList(_context.CompanyDivisions.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["JobTitleId"] = new SelectList(_context.JobTitles.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["ManagerId"] = new SelectList(_context.Employees.OrderBy(o => o.FirstName), "Id", "FirstName");
+            ViewData["OfficeId"] = new SelectList(_context.Offices.OrderBy(o => o.Company.Name).Select(s => new {s.Id, s.Address}), "Id", "Address");
             return View();
         }
 
@@ -153,11 +153,11 @@ namespace OrionTracking.Controllers
             {
                 return NotFound();
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Id", employee.CompanyId);
-            ViewData["CompanyDivisionId"] = new SelectList(_context.CompanyDivisions, "Id", "Id", employee.CompanyDivisionId);
-            ViewData["JobTitleId"] = new SelectList(_context.JobTitles, "Id", "Id", employee.JobTitleId);
-            ViewData["ManagerId"] = new SelectList(_context.Employees, "Id", "Id", employee.ManagerId);
-            ViewData["OfficeId"] = new SelectList(_context.Offices, "Id", "Id", employee.OfficeId);
+            ViewData["CompanyId"] = new SelectList(_context.Companies.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["CompanyDivisionId"] = new SelectList(_context.CompanyDivisions.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["JobTitleId"] = new SelectList(_context.JobTitles.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["ManagerId"] = new SelectList(_context.Employees.OrderBy(o => o.FirstName), "Id", "FirstName");
+            ViewData["OfficeId"] = new SelectList(_context.Offices.OrderBy(o => o.Company.Name).Select(s => new { s.Id, s.Address }), "Id", "Address");
             return View(employee);
         }
 
