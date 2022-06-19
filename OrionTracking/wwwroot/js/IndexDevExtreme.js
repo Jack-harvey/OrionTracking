@@ -44,8 +44,17 @@
 
         {
             type: 'buttons',
-            width: 75,
+            width: 90,
             buttons: [{
+                hint: 'Details',
+                icon: 'card',
+                onClick(e) {
+                    //const editItemLink = (`edit/${e.id}`);
+                    const newLink = (`${window.location.origin}/Employees/details/${e.row.key}`);
+                    window.location = newLink;
+
+                },
+            }, {
                 hint: 'Edit',
                 icon: 'edit',
                 onClick(e) {
