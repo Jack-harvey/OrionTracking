@@ -104,7 +104,11 @@ namespace OrionTracking.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["CompanyId"] = new SelectList(_context.Companies.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["CompanyDivisionId"] = new SelectList(_context.CompanyDivisions.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["JobTitleId"] = new SelectList(_context.JobTitles.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["ManagerId"] = new SelectList(_context.Employees.OrderBy(o => o.FirstName), "Id", "FirstName");
+            ViewData["OfficeId"] = new SelectList(_context.Offices.OrderBy(o => o.Company.Name).Select(s => new { s.Id, s.Address }), "Id", "Address");
             return View(employee);
         }
 
@@ -221,6 +225,11 @@ namespace OrionTracking.Controllers
                 return NotFound();
             }
 
+            ViewData["CompanyId"] = new SelectList(_context.Companies.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["CompanyDivisionId"] = new SelectList(_context.CompanyDivisions.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["JobTitleId"] = new SelectList(_context.JobTitles.OrderBy(o => o.Name), "Id", "Name");
+            ViewData["ManagerId"] = new SelectList(_context.Employees.OrderBy(o => o.FirstName), "Id", "FirstName");
+            ViewData["OfficeId"] = new SelectList(_context.Offices.OrderBy(o => o.Company.Name).Select(s => new { s.Id, s.Address }), "Id", "Address");
             return View(employee);
         }
 

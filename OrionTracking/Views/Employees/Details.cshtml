@@ -62,31 +62,37 @@
             @Html.DisplayNameFor(model => model.Company)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Company.Id)
+            @Html.DisplayFor(model => model.Company.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CompanyDivision)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CompanyDivision.Id)
+            @Html.DisplayFor(model => model.CompanyDivision.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.JobTitle)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.JobTitle.Id)
+            @Html.DisplayFor(model => model.JobTitle.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Manager)
+            Manager First Name
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Manager.Id)
+            @Html.DisplayFor(model => model.Manager.FirstName)
+        </dd>
+        <dt class = "col-sm-2">
+            Manager Last Name
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Manager.LastName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Office)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Office.Id)
+            @Html.DisplayFor(model => model.Office.Address)
         </dd>
     </dl>
 </div>
