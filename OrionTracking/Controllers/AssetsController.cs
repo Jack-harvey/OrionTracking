@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DevExtreme.AspNet.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OrionTracking.Data;
 using OrionTracking.Models;
+using OrionTracking.Models.Binding;
 
 namespace OrionTracking.Controllers
 {
@@ -22,8 +24,30 @@ namespace OrionTracking.Controllers
         // GET: Assets
         public async Task<IActionResult> Index()
         {
-            var orionContext = _context.Assets.Include(a => a.Employee).Include(a => a.Location).Include(a => a.Model).Include(a => a.ParentAsset).Include(a => a.Type);
-            return View(await orionContext.ToListAsync());
+            //var orionContext = _context.Assets.Include(a => a.Employee).Include(a => a.Location).Include(a => a.Model).Include(a => a.ParentAsset).Include(a => a.Type);
+            return View();
+        }
+
+//GET: Asset table for DevExtreme
+        [HttpGet]
+        public async Task<IActionResult> GetAction(DevExtremeDataSourceLoadOptions loadOptions)
+        {
+            var newContext = _context.Assets.Where(b => b.IsMobileService == false);
+            var source = _context.Assets.Where( b => b.IsMobileService == false && b.Active == true).Select(o => new
+            {
+                o.Id,
+                o.CompanyTrackingId,
+                o.Name,
+                typeName = o.Type.Name,
+                o.Employee.UserName,
+                Location = o.Location.Name,
+                o.PurchaseDate
+            });
+
+            loadOptions.PrimaryKey = new[] { "id" };
+            loadOptions.PaginateViaPrimaryKey = true;
+
+            return Json(await DataSourceLoader.LoadAsync(source, loadOptions));
         }
 
         // GET: Assets/Details/5
