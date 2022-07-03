@@ -32,7 +32,6 @@ namespace OrionTracking.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAction(DevExtremeDataSourceLoadOptions loadOptions)
         {
-            var newContext = _context.Assets.Where(b => b.IsMobileService == false);
             var source = _context.Assets.Where( b => b.IsMobileService == false && b.Active == true).Select(o => new
             {
                 o.Id,
