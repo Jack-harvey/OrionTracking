@@ -35,6 +35,27 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Dropdown
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="AssetLocations" asp-action="Index">Asset Locations</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="AssetModels" asp-action="Index">Asset Models</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="AssetTypes" asp-action="Index">Asset Types</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="ModelManufacturers" asp-action="Index">Model Manufacturers</a>
+                                <li><hr class="dropdown-divider"></li>
+                                <a class="dropdown-item" asp-area="" asp-controller="Companies" asp-action="Index">Companies</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="CompanyDivisions" asp-action="Index">Company Divisions</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="JobTitles" asp-action="Index">Job Titles</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Offices" asp-action="Index">Offices</a>
+                                <li><hr class="dropdown-divider"></li>
+                                <a class="dropdown-item" asp-area="" asp-controller="EmployeeDocuments" asp-action="Index">Employee Documents</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="DocumentTypes" asp-action="Index">DocumentTypes</a>
+
+
+                            </ul>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
