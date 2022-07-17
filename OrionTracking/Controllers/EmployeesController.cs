@@ -50,7 +50,7 @@ namespace OrionTracking.Controllers
             return View();
         }
 
-        //[HttpGet("employees")]
+        //GET: index table for DevExtreme
         [HttpGet]
         public async Task<IActionResult> GetAction(DevExtremeDataSourceLoadOptions loadOptions)
         {
