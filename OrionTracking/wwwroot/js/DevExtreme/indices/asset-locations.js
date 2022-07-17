@@ -1,5 +1,5 @@
 ﻿$(function () {
-    let serviceUrl = "https://localhost:7029/employees";
+    let serviceUrl = "https://localhost:7029/AssetLocations";
     DevExpress.localization.locale("en-AU");
     $("#dataGridContainer").dxDataGrid({
         // ...
@@ -15,33 +15,22 @@
         rowAlternationEnabled: true,
         showBorders: true,
         columns: [{
-            dataField: "firstName",
+            dataField: "name",
             caption: "Name"
         }, {
-            dataField: "lastName",
-            caption: "Surname"
+            dataField: "state",
+            caption: "State"
         }, {
-            dataField: "userName",
-            caption: "Username"
+            dataField: "postCode",
+            caption: "Post Code"
         }, {
-            dataField: "name",
-            caption: "Job title"
-        },
-        {
-            dataField: "email",
-            caption: "E-mail"
-        },
-        {
             dataField: "city",
-            caption: "Office"
+            caption: "City"
         },
         {
-            dataField: "startDate",
-            caption: "Start-Date",
-            dataType: "date",
-            format: 'dd-MMM-yyyy'
+            dataField: "street",
+            caption: "Street"
         },
-
         {
             type: 'buttons',
             width: 90,
@@ -50,7 +39,7 @@
                 icon: 'card',
                 onClick(e) {
                     //const editItemLink = (`edit/${e.id}`);
-                    const newLink = (`${window.location.origin}/Employees/details/${e.row.key}`);
+                    const newLink = (`${window.location.origin}/AssetLocations/details/${e.row.key}`);
                     window.location = newLink;
 
                 },
@@ -59,7 +48,7 @@
                 icon: 'edit',
                 onClick(e) {
                     //const editItemLink = (`edit/${e.id}`);
-                    const newLink = (`${window.location.origin}/Employees/edit/${e.row.key}`);
+                    const newLink = (`${window.location.origin}/AssetLocations/edit/${e.row.key}`);
                     window.location = newLink;
 
                 },
@@ -68,7 +57,7 @@
                     icon: 'trash',
                     onClick(e) {
                         //const editItemLink = (`edit/${e.id}`);
-                        const newLink = (`${window.location.origin}/Employees/delete/${e.row.key}`);
+                        const newLink = (`${window.location.origin}/AssetLocations/delete/${e.row.key}`);
                         window.location = newLink;
 
                     },
