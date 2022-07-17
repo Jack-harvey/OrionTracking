@@ -1,5 +1,5 @@
 ﻿$(function () {
-    let serviceUrl = "https://localhost:7029/employees";
+    let serviceUrl = "https://localhost:7029/CompanyDivisions";
     DevExpress.localization.locale("en-AU");
     $("#dataGridContainer").dxDataGrid({
         // ...
@@ -15,33 +15,15 @@
         rowAlternationEnabled: true,
         showBorders: true,
         columns: [{
-            dataField: "firstName",
-            caption: "Name"
-        }, {
-            dataField: "lastName",
-            caption: "Surname"
-        }, {
-            dataField: "userName",
-            caption: "Username"
+            dataField: "companyName",
+            caption: "Company"
         }, {
             dataField: "name",
-            caption: "Job title"
+            caption: "Division Name"
+        }, {
+            dataField: "managerId",
+            caption: "Division Manager"
         },
-        {
-            dataField: "email",
-            caption: "E-mail"
-        },
-        {
-            dataField: "city",
-            caption: "Office"
-        },
-        {
-            dataField: "startDate",
-            caption: "Start-Date",
-            dataType: "date",
-            format: 'dd-MMM-yyyy'
-        },
-
         {
             type: 'buttons',
             width: 90,
