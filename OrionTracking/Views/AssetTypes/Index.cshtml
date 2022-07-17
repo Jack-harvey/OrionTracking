@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OrionTracking.Models.AssetType>
+﻿@*@model IEnumerable<OrionTracking.Models.AssetType>*@
 
 @{
     ViewData["Title"] = "Index";
@@ -9,27 +9,13 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+<div id="dataGridContainer"></div>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/lib/dev-extreme/css/dx.light.css">
+    <link rel="stylesheet" href="~/css/Dev-Extreme.css">
+
+    <script type="text/javascript" src="~/lib/dev-extreme/js/dx.all.js"></script>
+    <script type="text/javascript" src="~/lib/dev-extreme/js/dx.aspnet.data.js"></script>
+    <script type="text/javascript" src="~/js/DevExtreme/indices/asset-types.js"></script>
 }
-    </tbody>
-</table>
