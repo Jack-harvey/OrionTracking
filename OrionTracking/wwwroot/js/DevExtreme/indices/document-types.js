@@ -1,5 +1,5 @@
 ﻿$(function () {
-    let serviceUrl = "https://localhost:7029/employees";
+    let serviceUrl = "https://localhost:7029/DocumentTypes";
     DevExpress.localization.locale("en-AU");
     $("#dataGridContainer").dxDataGrid({
         // ...
@@ -15,33 +15,12 @@
         rowAlternationEnabled: true,
         showBorders: true,
         columns: [{
-            dataField: "firstName",
-            caption: "Name"
-        }, {
-            dataField: "lastName",
-            caption: "Surname"
-        }, {
-            dataField: "userName",
-            caption: "Username"
-        }, {
             dataField: "name",
-            caption: "Job title"
+            caption: "Document Name"
+        }, {
+            dataField: "defaultSavePath",
+            caption: "Default Document Path"
         },
-        {
-            dataField: "email",
-            caption: "E-mail"
-        },
-        {
-            dataField: "city",
-            caption: "Office"
-        },
-        {
-            dataField: "startDate",
-            caption: "Start-Date",
-            dataType: "date",
-            format: 'dd-MMM-yyyy'
-        },
-
         {
             type: 'buttons',
             width: 90,
