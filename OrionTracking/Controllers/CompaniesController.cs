@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DevExtreme.AspNet.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OrionTracking.Data;
 using OrionTracking.Models;
+using OrionTracking.Models.Binding;
 
 namespace OrionTracking.Controllers
 {
@@ -22,9 +24,27 @@ namespace OrionTracking.Controllers
         // GET: Companies
         public async Task<IActionResult> Index()
         {
-              return _context.Companies != null ? 
-                          View(await _context.Companies.ToListAsync()) :
-                          Problem("Entity set 'OrionContext.Companies'  is null.");
+              //return _context.Companies != null ? 
+              //            View(await _context.Companies.ToListAsync()) :
+              //            Problem("Entity set 'OrionContext.Companies'  is null.");
+              return View();
+        }
+
+        //GET: Asset table for DevExtreme
+        [HttpGet]
+        public async Task<IActionResult> GetAction(DevExtremeDataSourceLoadOptions loadOptions)
+        {
+            var source = _context.Companies.Select(o => new
+            {
+                o.Id,
+                o.Name,
+                o.Domain
+            });
+
+            loadOptions.PrimaryKey = new[] { "id" };
+            loadOptions.PaginateViaPrimaryKey = true;
+
+            return Json(await DataSourceLoader.LoadAsync(source, loadOptions));
         }
 
         // GET: Companies/Details/5
