@@ -14,32 +14,55 @@
         showRowLines: true,
         rowAlternationEnabled: true,
         showBorders: true,
+        searchPanel: {
+            visible: true,
+            width: 240,
+            placeholder: 'Search...',
+        },
+        headerFilter: {
+            visible: true,
+        },
         columns: [{
             dataField: "firstName",
-            caption: "Name"
+            caption: "Name",
+            allowHeaderFiltering: false,
         }, {
             dataField: "lastName",
-            caption: "Surname"
+            caption: "Surname",
+            allowHeaderFiltering: false,
         }, {
             dataField: "userName",
-            caption: "Username"
+            caption: "Username",
+            allowHeaderFiltering: false,
         }, {
             dataField: "name",
-            caption: "Job title"
+            caption: "Job title",
+            allowHeaderFiltering: false,
         },
         {
             dataField: "email",
-            caption: "E-mail"
+            caption: "E-mail",
+            allowHeaderFiltering: false,
         },
         {
             dataField: "city",
-            caption: "Office"
+            caption: "Office",
+            allowHeaderFiltering: false,
         },
         {
             dataField: "startDate",
             caption: "Start-Date",
             dataType: "date",
-            format: 'dd-MMM-yyyy'
+            format: 'dd-MMM-yyyy',
+            allowHeaderFiltering: false,
+        },
+        {
+            dataField: "active",
+            dataType: "boolean",
+            showEditorAlways: false,
+            filtertype: '=',
+            filterValues: [true],
+            width: 90,
         },
 
         {
@@ -64,15 +87,15 @@
 
                 },
             }, {
-                    hint: 'delete',
-                    icon: 'trash',
-                    onClick(e) {
-                        //const editItemLink = (`edit/${e.id}`);
-                        const newLink = (`${window.location.origin}/Employees/delete/${e.row.key}`);
-                        window.location = newLink;
+                hint: 'delete',
+                icon: 'trash',
+                onClick(e) {
+                    //const editItemLink = (`edit/${e.id}`);
+                    const newLink = (`${window.location.origin}/Employees/delete/${e.row.key}`);
+                    window.location = newLink;
 
-                    },
-                }],
+                },
+            }],
         },
         ],
         allowColumnReordering: true,

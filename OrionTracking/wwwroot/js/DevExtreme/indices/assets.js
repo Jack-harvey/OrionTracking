@@ -14,28 +14,50 @@
         showRowLines: true,
         rowAlternationEnabled: true,
         showBorders: true,
+        searchPanel: {
+            visible: true,
+            width: 240,
+            placeholder: 'Search...',
+        },
+        headerFilter: {
+            visible: true,
+        },
         columns: [{
             dataField: "companyTrackingId",
-            caption: "Asset-Id"
+            caption: "Asset-Id",
+            allowHeaderFiltering: false,
         }, {
             dataField: "name",
-            caption: "Name"
+            caption: "Name",
+            allowHeaderFiltering: false,
         }, {
             dataField: "typeName",
-            caption: "Type"
+            caption: "Type",
+            allowHeaderFiltering: false,
         }, {
             dataField: "userName",
-            caption: "Employee"
+            caption: "Employee",
+            allowHeaderFiltering: false,
         },
         {
             dataField: "location",
-            caption: "Location"
+            caption: "Location",
+            allowHeaderFiltering: false,
         },
         {
             dataField: "purchaseDate",
             caption: "Purchase-Date",
+            allowHeaderFiltering: false,
             dataType: "date",
             format: 'dd-MMM-yyyy'
+        },
+        {
+            dataField: "active",
+            dataType: "boolean",
+            showEditorAlways: false,
+            filtertype: '=',
+            filterValues: [true],
+            width: 90,
         },
 
         {
@@ -60,15 +82,15 @@
 
                 },
             }, {
-                    hint: 'delete',
-                    icon: 'trash',
-                    onClick(e) {
-                        //const editItemLink = (`edit/${e.id}`);
-                        const newLink = (`${window.location.origin}/Assets/delete/${e.row.key}`);
-                        window.location = newLink;
+                hint: 'delete',
+                icon: 'trash',
+                onClick(e) {
+                    //const editItemLink = (`edit/${e.id}`);
+                    const newLink = (`${window.location.origin}/Assets/delete/${e.row.key}`);
+                    window.location = newLink;
 
-                    },
-                }],
+                },
+            }],
         },
         ],
         allowColumnReordering: true,

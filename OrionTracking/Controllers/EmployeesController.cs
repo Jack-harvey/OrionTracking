@@ -63,7 +63,8 @@ namespace OrionTracking.Controllers
                 o.Email,
                 o.Office.City,
                 o.JobTitle.Name,
-                o.UserName
+                o.UserName,
+                o.Active
             });
 
             loadOptions.PrimaryKey = new[] { "Id" };

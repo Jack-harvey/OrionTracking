@@ -32,7 +32,7 @@ namespace OrionTracking.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAction(DevExtremeDataSourceLoadOptions loadOptions)
         {
-            var source = _context.Assets.Where( b => b.IsMobileService == false && b.Active == true).Select(o => new
+            var source = _context.Assets.Where( b => b.IsMobileService == false).Select(o => new
             {
                 o.Id,
                 o.CompanyTrackingId,
@@ -40,7 +40,8 @@ namespace OrionTracking.Controllers
                 typeName = o.Type.Name,
                 o.Employee.UserName,
                 Location = o.Location.Name,
-                o.PurchaseDate
+                o.PurchaseDate,
+                o.Active
             });
 
             loadOptions.PrimaryKey = new[] { "id" };
