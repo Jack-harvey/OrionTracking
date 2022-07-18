@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DevExtreme.AspNet.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OrionTracking.Data;
 using OrionTracking.Models;
+using OrionTracking.Models.Binding;
 
 namespace OrionTracking.Controllers
 {
@@ -22,8 +24,31 @@ namespace OrionTracking.Controllers
         // GET: Offices
         public async Task<IActionResult> Index()
         {
-            var orionContext = _context.Offices.Include(o => o.Company);
-            return View(await orionContext.ToListAsync());
+            //var orionContext = _context.Offices.Include(o => o.Company);
+            //return View(await orionContext.ToListAsync());
+            return View();
+        }
+
+        //GET: Asset table for DevExtreme
+        [HttpGet]
+        public async Task<IActionResult> GetAction(DevExtremeDataSourceLoadOptions loadOptions)
+        {
+            var source = _context.Offices.Select(o => new
+            {
+                o.Id,
+                o.State,
+                o.PostCode,
+                o.City,
+                o.Address,
+                o.PhoneNumber,
+                o.PoboxNumber,
+                o.Company.Name
+            });
+
+            loadOptions.PrimaryKey = new[] { "id" };
+            loadOptions.PaginateViaPrimaryKey = true;
+
+            return Json(await DataSourceLoader.LoadAsync(source, loadOptions));
         }
 
         // GET: Offices/Details/5
