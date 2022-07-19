@@ -32,7 +32,8 @@ namespace OrionTracking.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAction(DevExtremeDataSourceLoadOptions loadOptions)
         {
-            var source = _context.Assets.Where( b => b.IsMobileService == false).Select(o => new
+            //string test = ViewBag.Test;
+            var source = _context.Assets.Select(o => new
             {
                 o.Id,
                 o.CompanyTrackingId,
@@ -41,7 +42,10 @@ namespace OrionTracking.Controllers
                 o.Employee.UserName,
                 Location = o.Location.Name,
                 o.PurchaseDate,
-                o.Active
+                o.Active,
+                o.IsMobileService,
+                o.MobileNumber,
+                ParentAssetId = o.ParentAsset.CompanyTrackingId
             });
 
             loadOptions.PrimaryKey = new[] { "id" };
