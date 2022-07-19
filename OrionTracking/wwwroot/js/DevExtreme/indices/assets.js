@@ -10,7 +10,7 @@
             //updateUrl: serviceUrl + "/UpdateAction",
             //deleteUrl: serviceUrl + "/DeleteAction",
         }),
-        showColumnLines: false,
+        showColumnLines: true,
         showRowLines: true,
         rowAlternationEnabled: true,
         showBorders: true,
@@ -20,7 +20,11 @@
             placeholder: 'Search...',
         },
         headerFilter: {
+            visible: false,
+        },
+        filterRow: {
             visible: true,
+            applyFilter: 'auto',
         },
         columns: [{
             dataField: "companyTrackingId",
@@ -55,8 +59,7 @@
             dataField: "active",
             dataType: "boolean",
             showEditorAlways: false,
-            filtertype: '=',
-            filterValues: [true],
+            filterValue: true,
             width: 90,
         },
 
