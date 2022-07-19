@@ -11,6 +11,7 @@ namespace OrionTracking.Models
         public Employee()
         {
             Assets = new HashSet<Asset>();
+            CompanyDivisions = new HashSet<CompanyDivision>();
             EmployeeDocuments = new HashSet<EmployeeDocument>();
             InverseManager = new HashSet<Employee>();
         }
@@ -55,6 +56,8 @@ namespace OrionTracking.Models
         public virtual Office? Office { get; set; }
         [InverseProperty("Employee")]
         public virtual ICollection<Asset> Assets { get; set; }
+        [InverseProperty("Manager")]
+        public virtual ICollection<CompanyDivision> CompanyDivisions { get; set; }
         [InverseProperty("Employee")]
         public virtual ICollection<EmployeeDocument> EmployeeDocuments { get; set; }
         [InverseProperty("Manager")]

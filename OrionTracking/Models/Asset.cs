@@ -35,6 +35,8 @@ namespace OrionTracking.Models
         public string? MobileNumber { get; set; }
         public bool IsMobileService { get; set; }
         public bool ToBeReturned { get; set; }
+        [Column("lastAssignedDate", TypeName = "date")]
+        public DateTime LastAssignedDate { get; set; }
 
         [ForeignKey("EmployeeId")]
         [InverseProperty("Assets")]

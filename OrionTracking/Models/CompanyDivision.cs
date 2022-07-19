@@ -23,6 +23,9 @@ namespace OrionTracking.Models
         [ForeignKey("CompanyId")]
         [InverseProperty("CompanyDivisions")]
         public virtual Company Company { get; set; } = null!;
+        [ForeignKey("ManagerId")]
+        [InverseProperty("CompanyDivisions")]
+        public virtual Employee Manager { get; set; } = null!;
         [InverseProperty("CompanyDivision")]
         public virtual ICollection<Employee> Employees { get; set; }
     }

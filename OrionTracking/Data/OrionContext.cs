@@ -91,6 +91,21 @@ namespace OrionTracking.Data
                     .HasConstraintName("FK_Audit_AspNetUsers");
             });
 
+            modelBuilder.Entity<CompanyDivision>(entity =>
+            {
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.CompanyDivisions)
+                    .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CompanyDivisions_Companies");
+
+                entity.HasOne(d => d.Manager)
+                    .WithMany(p => p.CompanyDivisions)
+                    .HasForeignKey(d => d.ManagerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CompanyDivisions_Employees");
+            });
+
             modelBuilder.Entity<Employee>(entity =>
             {
                 entity.HasOne(d => d.CompanyDivision)

@@ -1,0 +1,6 @@
+Scaffold-DbContext "Server=localhost;Database=orion;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir XModels -DataAnnotations
+
+
+Scaffold-DbContext -Tables vw_MobileNumbersOnly vw_AssetsOnly "Server=localhost;Database=orion;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir SQLViews -DataAnnotations
+
+Scaffold-DbContext -Tables CompanyDivisions Assets "Server=localhost;Database=orion;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir XModels -DataAnnotations
