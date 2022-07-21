@@ -27,8 +27,8 @@
     {
         dataField: "isMobileService",
         dataType: "boolean",
-        showEditorAlways: false,
-        filterValue: true,
+        //showEditorAlways: false,
+        //filterValue: true,
         width: 90,
         visible: false,
     },
@@ -105,8 +105,8 @@
     {
         dataField: "isMobileService",
         dataType: "boolean",
-        showEditorAlways: false,
-        filterValue: false,
+        //showEditorAlways: false,
+        //filterValue: false,
         width: 90,
         visible: false,
     },
@@ -169,17 +169,25 @@
         columns: columnsExcludingMobile,
         allowColumnReordering: true,
     })
+    $('#dataGridContainer').data('currentColumnSet', 'columnsExcludingMobile');
+    $('#btn-asset-table-toggle').on('click', function (e) {
+        let currentColumns = $('#dataGridContainer').data('currentColumnSet');
+        let newColumns = null;
+
+        if (currentColumns == 'columnsExcludingMobile') {
+            newColumns = columnsIncludingMobile;
+            currentColumns = 'columnsIncludingMobile'
+        }
+        else {
+            newColumns = columnsExcludingMobile;
+            currentColumns = 'columnsExcludingMobile';
+        }
+
+        $('#dataGridContainer').dxDataGrid('instance').option('columns', newColumns);
+        $('#dataGridContainer').data('currentColumnSet', currentColumns);
+
+    })
 });
-
-$('#dataGridContainer').data('currentColumnSet', 'columnsExcludingMobile');
-$('#toggleGridColumnSet').on('click', function (e) {
-    const currentColumns = $('#grid').data('currentColumnSet');
-    let newColumns = null;
-
-    if (currentColumns ==)
-})
-
-
 
 
 
