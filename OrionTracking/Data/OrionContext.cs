@@ -84,6 +84,8 @@ namespace OrionTracking.Data
 
             modelBuilder.Entity<Audit>(entity =>
             {
+                entity.Property(e => e.Timestamp).HasDefaultValueSql("(getutcdate())");
+
                 entity.HasOne(d => d.AspNetUser)
                     .WithMany(p => p.Audits)
                     .HasForeignKey(d => d.AspNetUserId)
