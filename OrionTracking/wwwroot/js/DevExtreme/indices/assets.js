@@ -27,8 +27,8 @@
     {
         dataField: "isMobileService",
         dataType: "boolean",
-        //showEditorAlways: false,
-        //filterValue: true,
+        showEditorAlways: false,
+        filterValue: true,
         width: 90,
         visible: false,
     },
@@ -105,8 +105,8 @@
     {
         dataField: "isMobileService",
         dataType: "boolean",
-        //showEditorAlways: false,
-        //filterValue: false,
+        showEditorAlways: false,
+        filterValue: false,
         width: 90,
         visible: false,
     },
@@ -183,11 +183,20 @@
             currentColumns = 'columnsExcludingMobile';
         }
 
+        const dataGrid = dataGrid();
+
+
+        //dataGrid.clearSelection();
+        //dataGrid.option('columns', newColumns);
+        //dataGrid.state({});
+        //$('#dataGridContainer').data('currentColumnSet', currentColumns);
+
+
+        $('#dataGridContainer').dxDataGrid('instance').clearSelection();
         $('#dataGridContainer').dxDataGrid('instance').option('columns', newColumns);
+        $('#dataGridContainer').dxDataGrid('instance').state({});
         $('#dataGridContainer').data('currentColumnSet', currentColumns);
+
 
     })
 });
-
-
-
