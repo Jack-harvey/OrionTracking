@@ -8,6 +8,10 @@ namespace OrionTracking.Models
 {
     public partial class DocumentType
     {
+        public DocumentType()
+        {
+            EmployeeDocuments = new HashSet<EmployeeDocument>();
+        }
         [Key]
         public int Id { get; set; }
         [StringLength(255)]
@@ -16,5 +20,8 @@ namespace OrionTracking.Models
         public string RootPath { get; set; } = null!;
         [StringLength(260)]
         public string? FolderName { get; set; } = null!;
+
+        [InverseProperty("Type")]
+        public virtual ICollection<EmployeeDocument> EmployeeDocuments { get; set; }
     }
 }

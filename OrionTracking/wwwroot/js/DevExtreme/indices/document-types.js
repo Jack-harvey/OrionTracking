@@ -18,7 +18,7 @@
             dataField: "name",
             caption: "Document Name"
         }, {
-            dataField: "defaultSavePath",
+            dataField: "RootPath",
             caption: "Default Document Path"
         },
         {
