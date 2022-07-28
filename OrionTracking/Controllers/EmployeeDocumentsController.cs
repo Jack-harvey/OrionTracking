@@ -29,7 +29,9 @@ namespace OrionTracking.Controllers
         public async Task DocumentSaver(IFormFile pdfUpload, string uniqueFileName, string uniquePath)
         {
             string fullDirectory = $"{_configuration.GetValue<string>("OrionConfigurationSettings:RootDocumentPath")}" + $"{uniquePath}";
+            if (!Directory.Exists(fullDirectory))
             Directory.CreateDirectory(fullDirectory);
+
             using (FileStream fileStream = new($"{fullDirectory}" + $"{uniqueFileName}", FileMode.Create))
             {
                 await pdfUpload.CopyToAsync(fileStream);
@@ -39,7 +41,7 @@ namespace OrionTracking.Controllers
         }
 
 
-        public bool PdfValidationCheck(IFormFile pdfUpload)
+        public bool IsFileValidPdf(IFormFile pdfUpload)
         {
             return new FileFormatInspector().DetermineFileFormat(pdfUpload.OpenReadStream()) is Pdf;
             //var inspector = new FileFormatInspector();
@@ -113,59 +115,64 @@ namespace OrionTracking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Path,Timestamp,TypeId,EmployeeId")] EmployeeDocument employeeDocument, IFormFile pdfUpload)
         {
-            DateTime documentTimeStamp = DateTime.Now;
-            employeeDocument.Timestamp = documentTimeStamp;
-
-            Employee? selectedEmployee = _context.Employees.FirstOrDefault(o => o.Id == employeeDocument.EmployeeId);
-            DocumentType? selectedDocument = _context.DocumentTypes.FirstOrDefault(o => o.Id == employeeDocument.TypeId);
-            bool employeeDocumentValid = true;
-
-            if (selectedDocument == null || selectedEmployee == null)
+            var modelStateErrors = ModelState.Values.SelectMany(v => v.Errors);
+            if (ModelState.IsValid)
             {
-                employeeDocumentValid = false;
-            }
+                bool employeeAndDocumentValid = true;
+                DateTime uploadTimeStamp = DateTime.Now;
+                Employee? selectedEmployee = _context.Employees.FirstOrDefault(o => o.Id == employeeDocument.EmployeeId);
+                DocumentType? selectedDocument = _context.DocumentTypes.FirstOrDefault(o => o.Id == employeeDocument.TypeId);
 
-            bool fileTypeValid = false;
 
-            if (pdfUpload != null)
-            {
-                fileTypeValid = PdfValidationCheck(pdfUpload);
-            }
-            else
-            {
-                fileTypeValid = true;
-            }
-
-            try
-            {
-
-                if (fileTypeValid && employeeDocumentValid)
+                if (selectedDocument == null || selectedEmployee == null)
                 {
-                    if (pdfUpload != null)
-                    {
-                        string uniqueFolderStructure = $"/{employeeDocument.EmployeeId}/{selectedDocument.Name}/";
-                        string uniqueFileName = $"{selectedEmployee.UserName}" + " - " + $"{documentTimeStamp.ToString("yyyy.MM.dd.HH.mm.ss.ffffff")}" + ".pdf";
-                        employeeDocument.Name = $"{selectedEmployee.FirstName}" + $"{selectedEmployee.LastName}" + "-" + $"{selectedDocument.Name}" + $"{documentTimeStamp.ToString("yyyy.MM.dd.HH.mm.ss.ffffff")}";
-                        employeeDocument.Path = $"{uniqueFolderStructure}" + $"{uniqueFileName}";
-                        await DocumentSaver(pdfUpload, uniqueFileName, uniqueFolderStructure);
-                    }
+                    employeeAndDocumentValid = false;
+                }
 
-                    var errors = ModelState.Values.SelectMany(v => v.Errors);
-                    if (ModelState.IsValid)
+                bool fileTypeValid = false;
+
+                if (pdfUpload != null)
+                {
+                    fileTypeValid = IsFileValidPdf(pdfUpload);
+                }
+                else
+                {
+                    fileTypeValid = true;
+                }
+
+                try
+                {
+
+                    if (fileTypeValid && employeeAndDocumentValid)
                     {
+                        if (pdfUpload != null)
+                        {
+                            string uniqueFolderStructure = $"/{employeeDocument.EmployeeId}/{selectedDocument.Name}/";
+                            string uniqueFileName = $"{selectedEmployee.UserName}" + " - " + $"{uploadTimeStamp.ToString("yyyy.MM.dd.HH.mm.ss.ffffff")}" + ".pdf";
+                            employeeDocument.Name = $"{selectedEmployee.FirstName}" + $"{selectedEmployee.LastName}" + "-" + $"{selectedDocument.Name}" + $"{uploadTimeStamp.ToString("yyyy.MM.dd.HH.mm.ss.ffffff")}";
+                            employeeDocument.Path = $"{uniqueFolderStructure}" + $"{uniqueFileName}";
+                            await DocumentSaver(pdfUpload, uniqueFileName, uniqueFolderStructure);
+                        }
+                        else
+                        {
+                            employeeDocument.Name = "No document provided";
+                            employeeDocument.Path = "No document provided";
+                        }
+
+                        employeeDocument.Timestamp = uploadTimeStamp;
                         _context.Add(employeeDocument);
                         await _context.SaveChangesAsync();
                         return RedirectToAction(nameof(Index));
                     }
-                }
 
-            }
-            catch (DbUpdateException employeeDocumentsCreatePost)
-            {
-                //_logger.LogError(employeeDocumentsCreatePost, "failed :)";
-                //ModelState.AddModelError("", "Unable to save changes. " +
-                // "Try again, and if the problem persists " +
-                // "see your system administrator.");
+                }
+                catch (DbUpdateException employeeDocumentsCreatePost)
+                {
+                    //_logger.LogError(employeeDocumentsCreatePost, "failed :)";
+                    //ModelState.AddModelError("", "Unable to save changes. " +
+                    // "Try again, and if the problem persists " +
+                    // "see your system administrator.");
+                }
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Id", employeeDocument.EmployeeId);
             ViewData["TypeId"] = new SelectList(_context.DocumentTypes, "Id", "Id", employeeDocument.TypeId);
