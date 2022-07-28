@@ -8,22 +8,23 @@ namespace OrionTracking.Models
 {
     public partial class EmployeeDocument
     {
+
         [Key]
         public int Id { get; set; }
         [StringLength(255)]
-        public string Name { get; set; } = null!;
+        public string? Name { get; set; }
         [StringLength(260)]
-        public string Path { get; set; } = null!;
+        public string? Path { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime Timestamp { get; set; }
+        public DateTime? Timestamp { get; set; }
         public int TypeId { get; set; }
         public int EmployeeId { get; set; }
 
         [ForeignKey("EmployeeId")]
         [InverseProperty("EmployeeDocuments")]
-        public virtual Employee Employee { get; set; } = null!;
+        public virtual Employee? Employee { get; set; }
         [ForeignKey("TypeId")]
         [InverseProperty("EmployeeDocuments")]
-        public virtual DocumentType Type { get; set; } = null!;
+        public virtual DocumentType? Type { get; set; }
     }
 }
