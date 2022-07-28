@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
+using FileSignatures;
+using FileSignatures.Formats;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +17,35 @@ namespace OrionTracking.Controllers
     public class EmployeeDocumentsController : Controller
     {
         private readonly OrionContext _context;
+        private readonly IConfiguration _configuration;
 
-        public EmployeeDocumentsController(OrionContext context)
+        public EmployeeDocumentsController(OrionContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
+        }
+
+        //Method to save the document to requested path
+        public async Task DocumentSaver(IFormFile pdfUpload, string uniqueFileName, string uniquePath)
+        {
+            string fullDirectory = $"{_configuration.GetValue<string>("OrionConfigurationSettings:RootDocumentPath")}" + $"{uniquePath}";
+            Directory.CreateDirectory(fullDirectory);
+            using (FileStream fileStream = new($"{fullDirectory}" + $"{uniqueFileName}", FileMode.Create))
+            {
+                await pdfUpload.CopyToAsync(fileStream);
+
+            }
+            return;
+        }
+
+
+        public bool PdfValidationCheck(IFormFile pdfUpload)
+        {
+            return new FileFormatInspector().DetermineFileFormat(pdfUpload.OpenReadStream()) is Pdf;
+            //var inspector = new FileFormatInspector();
+            //var fileTypeInspection = inspector.DetermineFileFormat(pdfUpload.OpenReadStream());
+            //bool isValidPdf = fileTypeInspection is Pdf;
+            //return isValidPdf;
         }
 
         // GET: EmployeeDocuments
@@ -72,8 +99,10 @@ namespace OrionTracking.Controllers
         // GET: EmployeeDocuments/Create
         public IActionResult Create()
         {
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Id");
-            ViewData["TypeId"] = new SelectList(_context.DocumentTypes, "Id", "Id");
+            //ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Id");
+            ViewData["EmployeeId"] = new SelectList(_context.Employees.OrderBy(o => o.UserName).Select(s => new { s.Id, s.UserName }), "Id", "UserName");
+            //ViewData["TypeId"] = new SelectList(_context.DocumentTypes, "Id", "Id");
+            ViewData["TypeId"] = new SelectList(_context.DocumentTypes.OrderBy(o => o.Name).Select(s => new { s.Id, s.Name }), "Id", "Name");
             return View();
         }
 
@@ -82,13 +111,61 @@ namespace OrionTracking.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Path,Timestamp,TypeId,EmployeeId")] EmployeeDocument employeeDocument)
+        public async Task<IActionResult> Create([Bind("Id,Name,Path,Timestamp,TypeId,EmployeeId")] EmployeeDocument employeeDocument, IFormFile pdfUpload)
         {
-            if (ModelState.IsValid)
+            DateTime documentTimeStamp = DateTime.Now;
+            employeeDocument.Timestamp = documentTimeStamp;
+
+            Employee? selectedEmployee = _context.Employees.FirstOrDefault(o => o.Id == employeeDocument.EmployeeId);
+            DocumentType? selectedDocument = _context.DocumentTypes.FirstOrDefault(o => o.Id == employeeDocument.TypeId);
+            bool employeeDocumentValid = true;
+
+            if (selectedDocument == null || selectedEmployee == null)
             {
-                _context.Add(employeeDocument);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                employeeDocumentValid = false;
+            }
+
+            bool fileTypeValid = false;
+
+            if (pdfUpload != null)
+            {
+                fileTypeValid = PdfValidationCheck(pdfUpload);
+            }
+            else
+            {
+                fileTypeValid = true;
+            }
+
+            try
+            {
+
+                if (fileTypeValid && employeeDocumentValid)
+                {
+                    if (pdfUpload != null)
+                    {
+                        string uniqueFolderStructure = $"/{employeeDocument.EmployeeId}/{selectedDocument.Name}/";
+                        string uniqueFileName = $"{selectedEmployee.UserName}" + " - " + $"{documentTimeStamp.ToString("yyyy.MM.dd.HH.mm.ss.ffffff")}" + ".pdf";
+                        employeeDocument.Name = $"{selectedEmployee.FirstName}" + $"{selectedEmployee.LastName}" + "-" + $"{selectedDocument.Name}" + $"{documentTimeStamp.ToString("yyyy.MM.dd.HH.mm.ss.ffffff")}";
+                        employeeDocument.Path = $"{uniqueFolderStructure}" + $"{uniqueFileName}";
+                        await DocumentSaver(pdfUpload, uniqueFileName, uniqueFolderStructure);
+                    }
+
+                    var errors = ModelState.Values.SelectMany(v => v.Errors);
+                    if (ModelState.IsValid)
+                    {
+                        _context.Add(employeeDocument);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
+            }
+            catch (DbUpdateException employeeDocumentsCreatePost)
+            {
+                //_logger.LogError(employeeDocumentsCreatePost, "failed :)";
+                //ModelState.AddModelError("", "Unable to save changes. " +
+                // "Try again, and if the problem persists " +
+                // "see your system administrator.");
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Id", employeeDocument.EmployeeId);
             ViewData["TypeId"] = new SelectList(_context.DocumentTypes, "Id", "Id", employeeDocument.TypeId);
@@ -184,14 +261,14 @@ namespace OrionTracking.Controllers
             {
                 _context.EmployeeDocuments.Remove(employeeDocument);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EmployeeDocumentExists(int id)
         {
-          return (_context.EmployeeDocuments?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.EmployeeDocuments?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
